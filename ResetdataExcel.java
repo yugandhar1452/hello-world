@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -18,64 +19,30 @@ import org.openqa.selenium.chrome.ChromeDriver;
 //import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class Resetfunctionality {
-	private static XSSFSheet ExcelWSheet;
-	private static XSSFWorkbook ExcelWBook;
-	private static XSSFCell Cell;
+public class ResetdataExcel {
+	private static XSSFSheet Sheet1;
+
+	
 	private static XSSFRow Row;
 	public static final String Path_TestData = "C:\\Users\\yugandhar\\workspace\\SeleniumPractice\\src\\testdata\\";
 	public static final String File_TestData = "TestData.xlsx";
 
 
-
-	public static void setExcelFile(String Path,String SheetName) throws Exception {
-
-		try {
-			// Open the Excel file
-			FileInputStream ExcelFile = new FileInputStream(Path_TestData+File_TestData);
-			// Access the required test data sheet
-			ExcelWBook = new XSSFWorkbook(ExcelFile);
-			ExcelWSheet = ExcelWBook.getSheet(SheetName);
-		} catch (Exception e){
-			throw (e);
-		}
-	}
-	//This method is to write in the Excel cell, Row num and Col num are the parameters
-
-	public static void setCellData(String Result,  int RowNum, int ColNum) throws Exception
-	{
-		try{
-			Row  = ExcelWSheet.getRow(RowNum);
-			Cell = Row.getCell(ColNum);
-			if (Cell == null) {
-				Cell = Row.createCell(ColNum);
-				Cell.setCellValue(Result);
-			} 
-			else {
-				Cell.setCellValue(Result);
-			}
-		}
-		catch(Exception e){
-			throw(e);
-		}
-		FileOutputStream fileOut = new FileOutputStream(Path_TestData+File_TestData);
-		ExcelWBook.write(fileOut);
-		//fileOut.flush();
-		//fileOut.close();
-	}
+	private static XSSFWorkbook workbook;
 	static WebDriver driver=null;
 
-/*	public static void highlightElement(WebElement element) throws InterruptedException {
+	/*	public static void highlightElement(WebElement element) throws InterruptedException {
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].setAttribute('style', arguments[1]);", element, "color: red; border: 10px solid red;");
 		js.executeScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
 		//		driver.manage().timeouts().Explicitwait(100, TimeUnit.SECONDS);
 	}
-*/
+	 */
 	public static void main(String[] args) throws Exception {
 
 		//WebDriver driver = new FirefoxDriver();
-	
+		workbook = new XSSFWorkbook();
+		Sheet1=workbook.createSheet("Sheet123");
 
 		String chrome="E:\\Selenium Practice\\chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", chrome);
@@ -112,20 +79,33 @@ public class Resetfunctionality {
 		Select LessontypeDP=new Select(driver.findElement(By.id("lessonType")));
 		List<WebElement> ProblemTypes = LessontypeDP.getOptions();
 		System.out.println(ProblemTypes.size());
-		for(int i=0;i<ProblemTypes.size();i++)
+		int x=0;
+		for(int i=0;i<3;i++)
 		{
-
+			int j;
 			LessontypeDP.selectByIndex(i);
+			Row = Sheet1.createRow(x);
+			Cell Cell1=Row.createCell(0);
+			Cell1.setCellValue(ProblemTypes.get(i).getText());
 			System.out.println(ProblemTypes.get(i).getText());
 			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 			Select LessonDP=new Select(driver.findElement(By.id("lesson")));
 			List<WebElement> Lessonnames=LessonDP.getOptions();
-		for(int j=0;j<Lessonnames.size();j++)
+			for(j=0;j<Lessonnames.size();j++)	
 			{
-			System.out.println(Lessonnames.get(j).getText());
-		
+				System.out.println(Lessonnames.get(j).getText());
+				Row = Sheet1.createRow(x);
+				Cell Cell2=Row.createCell(1);
+				Cell2.setCellValue(Lessonnames.get(j).getText());
+				x++;
 			}
-		}
 
+		}
+		FileOutputStream out= new FileOutputStream("C:\\Users\\yugandhar\\Desktop\\workbook.xlsx");
+		workbook.write(out);
+		out.close();
+		System.out.println("Succsess");
+		driver.quit();
 	}
+
 }
