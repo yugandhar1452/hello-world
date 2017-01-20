@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.Select;
 public class ResetdataExcel {
 	private static XSSFSheet Sheet1;
 
-	
+
 	private static XSSFRow Row;
 	public static final String Path_TestData = "C:\\Users\\yugandhar\\workspace\\SeleniumPractice\\src\\testdata\\";
 	public static final String File_TestData = "TestData.xlsx";
@@ -80,9 +80,9 @@ public class ResetdataExcel {
 		List<WebElement> ProblemTypes = LessontypeDP.getOptions();
 		System.out.println(ProblemTypes.size());
 		int x=0;
-		for(int i=0;i<3;i++)
+		int j;
+		for(int i=0;i<ProblemTypes.size()-250;i++)
 		{
-			int j;
 			LessontypeDP.selectByIndex(i);
 			Row = Sheet1.createRow(x);
 			Cell Cell1=Row.createCell(0);
@@ -93,11 +93,20 @@ public class ResetdataExcel {
 			List<WebElement> Lessonnames=LessonDP.getOptions();
 			for(j=0;j<Lessonnames.size();j++)	
 			{
-				System.out.println(Lessonnames.get(j).getText());
-				Row = Sheet1.createRow(x);
-				Cell Cell2=Row.createCell(1);
-				Cell2.setCellValue(Lessonnames.get(j).getText());
-				x++;
+				if(x==x+j)
+				{
+					Cell Cell2=Row.createCell(1);
+					Cell2.setCellValue(Lessonnames.get(j).getText());
+					x++;
+				}
+				else
+				{
+					//System.out.println(Lessonnames.get(j).getText());
+					Row = Sheet1.createRow(x);
+					Cell Cell2=Row.createCell(1);
+					Cell2.setCellValue(Lessonnames.get(j).getText());
+					x++;
+				}
 			}
 
 		}
