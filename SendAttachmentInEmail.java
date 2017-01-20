@@ -26,8 +26,8 @@ public class SendAttachmentInEmail {
       // Sender's email ID needs to be mentioned
       String from = "yugandhar.nalam@gmail.com";
 
-      final String username = "yugandhar.nalam";//change accordingly
-      final String password = "mymother@2";//change accordingly
+      final String username = "testingconnect451@gmail.com";//change accordingly
+      final String password = "Second@123";//change accordingly
 
       // Assuming you are sending email through relay.jangosmtp.net
       String host = "smtp.gmail.com";
